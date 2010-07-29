@@ -9,12 +9,16 @@
 int main(int argc, char **argv) {
 
  if(argc < 2) {
-  fprintf(stderr, "Missing arguments\n");
+  fprintf(stderr, "error: Missing arguments\n");
   exit(EXIT_FAILURE);
  }
 
  mem_t *mem = (mem_t *)malloc(sizeof(mem_t));
  reg_t *reg = (reg_t *)malloc(sizeof(reg_t));
+ if(mem = NULL || reg = NULL) {
+  fprintf(stderr, "error: Failed to allocate memory for MMU\n");
+  exit(EXIT_FAILURE);
+ }
 
  cpu_t cpu = {
   {
@@ -33,10 +37,11 @@ int main(int argc, char **argv) {
   exit(EXIT_FAILURE);
  }
 
- printf("Loaded rom: %d bytes\n", cpu.mem->rom_size);
+ printf("Loaded rom:      %d bytes\n", cpu.mem->rom_size);
 
  cpu.mem->pos = 512;
- while(cpu.mem->pos < (cpu.mem->rom_size - 2)) {
+// while(cpu.mem->pos < (cpu.mem->rom_size - 2)) {
+ while(cpu.mem->pos > 0x0200 && cpu.mem->pos < (cpu.mem->rom_size + 0x0200)) {
   printf("OPCODE: %.2x%.2x\n", cpu.mem->mem[cpu.mem->pos], cpu.mem->mem[cpu.mem->pos + 1]);
   cpu.fn[cpu.mem->mem[cpu.mem->pos] >> 4](&cpu);
 
