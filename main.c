@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "instr.h"
 #include "proc.h"
 
 int main(int argc, char **argv) {
@@ -10,9 +11,15 @@ int main(int argc, char **argv) {
  mem_t *mem = (mem_t *)malloc(sizeof(mem_t));
  reg_t *reg = (reg_t *)malloc(sizeof(reg_t));
 
- cpu_t cpu;
- cpu.mem = mem;
- cpu.reg = reg;
+ cpu_t cpu = {
+    {opcode0, opcode1, opcode2, opcode3,
+     opcode4, opcode5, opcode6, opcode7,
+     opcode8, opcode9, opcodea, opcodeb,
+     opcodec, opcoded, opcodee, opcodef},
+    mem,
+    reg,
+    0    
+ };
 
  if((cpu.mem->size = read_rom(argv[1], &cpu.mem->rom)) < 0) {
   fprintf(stderr, "Failed to load rom: %s\n", argv[1]);

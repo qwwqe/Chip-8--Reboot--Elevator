@@ -219,3 +219,21 @@ void opcode9(cpu_t *cpu) {
 
 }
 
+ // instructions beginning with a
+void opcodea(cpu_t *cpu) {}
+
+// instructions beginning with b
+void opcodeb(cpu_t *cpu) {}
+
+// instructions beginning with c
+void opcodec(cpu_t *cpu) {}
+
+// instructions beginning with d
+void opcoded(cpu_t *cpu) {} 
+
+// instructions beginning with e
+void opcodee(cpu_t *cpu) {} 
+
+// instructions beginning with f
+void opcodef(cpu_t *cpu) {} 
+

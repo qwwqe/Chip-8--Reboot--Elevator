@@ -14,5 +14,11 @@ void opcode6(cpu_t *cpu); // instructions beginning with 6
 void opcode7(cpu_t *cpu); // instructions beginning with 7
 void opcode8(cpu_t *cpu); // instructions beginning with 8
 void opcode9(cpu_t *cpu); // instructions beginning with 9
+void opcodea(cpu_t *cpu); // instructions beginning with a
+void opcodeb(cpu_t *cpu); // instructions beginning with b
+void opcodec(cpu_t *cpu); // instructions beginning with c
+void opcoded(cpu_t *cpu); // instructions beginning with d
+void opcodee(cpu_t *cpu); // instructions beginning with e
+void opcodef(cpu_t *cpu); // instructions beginning with f
 
 #endif

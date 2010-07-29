@@ -17,16 +17,14 @@ typedef struct {
 
 } reg_t;
 
-typedef struct {
+typedef struct _cpu_t {
 
-// instr	fn[0x0F];
+ void (*fn[0x10])(struct _cpu_t *cpu);
  mem_t	*mem;
  reg_t	*reg;
  int advpc; // advance program counter flag
 
 } cpu_t;
-
-// typedef int (*instr)(cpu_t *cpu);
 
 int read_rom(const char *filename, unsigned char **rom); // load rom file into blah blah blah
 
