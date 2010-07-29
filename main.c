@@ -23,22 +23,22 @@ int main(int argc, char **argv) {
    opcode8, opcode9, opcodea, opcodeb,
    opcodec, opcoded, opcodee, opcodef
   },
-  mem, reg, NULL, 0    
+  mem, reg, NULL, 0
  };
 
  printf("Initialized CPU: %p\n", &cpu);
 
- if((cpu.mem->size = read_rom(argv[1], &cpu.mem->rom)) == -1) {
+ if((cpu.mem->rom_size = read_rom(argv[1], &cpu.mem->mem)) == -1) {
   fprintf(stderr, "Failed to load rom: %s\n", argv[1]);
   exit(EXIT_FAILURE);
  }
 
- printf("Loaded rom: %d bytes\n", cpu.mem->size);
+ printf("Loaded rom: %d bytes\n", cpu.mem->rom_size);
 
- cpu.mem->pos = 0;
- while(cpu.mem->pos < (cpu.mem->size - 2)) {
-  printf("OPCODE: %.2x%.2x\n", cpu.mem->rom[cpu.mem->pos], cpu.mem->rom[cpu.mem->pos + 1]);
-  cpu.fn[cpu.mem->rom[cpu.mem->pos] >> 4](&cpu);
+ cpu.mem->pos = 512;
+ while(cpu.mem->pos < (cpu.mem->rom_size - 2)) {
+  printf("OPCODE: %.2x%.2x\n", cpu.mem->mem[cpu.mem->pos], cpu.mem->mem[cpu.mem->pos + 1]);
+  cpu.fn[cpu.mem->mem[cpu.mem->pos] >> 4](&cpu);
 
   if(!cpu.advpc)
    cpu.mem->pos += 2;

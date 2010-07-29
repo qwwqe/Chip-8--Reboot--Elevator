@@ -2,6 +2,9 @@
 #ifndef PROC_H
 #define PROC_H
 
+#define MEM_SIZE 4096
+#define ROM_LOC	 512
+
 typedef struct _stack_t {
 
     unsigned int adr;
@@ -11,9 +14,9 @@ typedef struct _stack_t {
 
 typedef struct {
 
- unsigned char *rom;
+ unsigned char *mem;
  unsigned int 	pos;
- unsigned int	size;
+ unsigned int	rom_size;
 
 } mem_t;
 
@@ -34,6 +37,6 @@ typedef struct _cpu_t {
 
 } cpu_t;
 
-int read_rom(const char *filename, unsigned char **rom); // load rom file into blah blah blah
+int read_rom(const char *filename, unsigned char **mem); // load rom file into memory
 
 #endif
