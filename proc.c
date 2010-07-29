@@ -1,6 +1,8 @@
 // bz
-
 #include "proc.h"
+
+#include <stdio.h>
+#include <stdlib.h>
 
 int read_rom(const char *filename, unsigned char **rom) {
 

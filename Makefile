@@ -1,15 +1,18 @@
 CC	= /usr/bin/gcc
-DEBUG	= -Wall -g
+CFLAGS = -c -Wall -g
 
 .PHONY: clean all
 
 all: clean chip8
 
-chip8: proc.o
-	$(CC) $(DEBUG) $< -o $@ main.c
+chip8: proc.o main.o
+	$(CC) proc.o main.o -o $@
 
-proc.o: proc.c proc.h
-	$(CC) $(DEBUG) $< -o $@
+main.o: main.c
+	$(CC) $(CFLAGS) $<
+
+proc.o: proc.c
+	$(CC) $(CFLAGS) $<
 
 clean:
 	rm -f chip8 *.o
