@@ -85,7 +85,8 @@ void opcode3(cpu_t *cpu) {
 
  // 3XKK
  if(cpu->reg->v[n2] == cpu->mem->rom[cpu->mem->pos + 1]) {
-  cpu->mem->rom += 2;
+  cpu->mem->pos += 2;
+  cpu->advpc = 1;
  }
 }
 
@@ -98,7 +99,8 @@ void opcode4(cpu_t *cpu) {
 
  // 4XKK
  if(cpu->reg->v[n2] != cpu->mem->rom[cpu->mem->pos + 1]) {
-  cpu->mem->rom += 2;
+  cpu->mem->pos += 2;
+  cpu->advpc = 1;
  }
 }
 
@@ -111,7 +113,8 @@ void opcode5(cpu_t *cpu) {
 
  // 5XY0
  if(n4 == 0x00 && cpu->reg->v[n2] == cpu->reg->v[n3]) {
-  cpu->mem->rom += 2;
+  cpu->mem->pos += 2;
+  cpu->advpc = 1;
  }
 }
 
@@ -202,7 +205,17 @@ void opcode8(cpu_t *cpu) {
 // instructions beginning with 9
 void opcode9(cpu_t *cpu) {
 
-    
+    unsigned char n1, n2, n3, n4; // nibbles
+    n1 = 0x08; // assumption..
+    n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
+    n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+    n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
+
+    // 9XY0 - skip next instruction if VX != VY
+    if(cpu->mem->rom[n2] != cpu->mem->rom[n3]) {
+        cpu->mem->pos += 2;
+        cpu->advpc = 1;
+    }
 
 }
 
