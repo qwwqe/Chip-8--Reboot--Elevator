@@ -1,30 +1,15 @@
+// "sip 8"
+
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "proc.h"
 
 typedef int (*opcode_function)(unsigned char, unsigned char, unsigned char);
 
 int opcode6X(unsigned char second, unsigned char third, unsigned char fourth) {
  printf("%02X %02X %02X\n", second, third, fourth);
  return 1;
-}
-
-int read_rom(const char *filename, unsigned char **rom) {
-
- int rom_size;
- FILE *fd = NULL;
-
- if((fd = fopen(filename, "r")) != NULL) {
-  fseek(fd, 0, SEEK_END);
-  rom_size = ftell(fd);
-  rewind(fd);
-  (*rom) = malloc(rom_size);
-  fread((*rom), 1, rom_size, fd);
-  fclose(fd);
-
-  return rom_size;
- }
-
- return -1;
 }
 
 int main(int argc, char **argv) {
