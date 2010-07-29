@@ -2,6 +2,136 @@
 #include "instr.h"
 #include "proc.h"
 
+void opcode0(cpu_t cpu*) {
+ unsigned char n1, n2, n3, n4;
+ n1 = cpu->mem->rom[pos] >> 1;
+ n2 = cpu->mem->rom[pos] & 0x0F;
+ n3 = cpu->mem->rom[pos + 1] >> 1;
+ n4 = cpu->mem->rom[pos + 1] & 0x0F;
+
+ switch(n3) {
+  case 0x0C:    // opcode: 00CN
+                // scroll down: N (n2) lines
+  break;
+  case 0x0E:
+   switch(n4) {
+    case 0x00:  // opcode: 00E0
+                // erase screen
+    break;
+    case 0x0E:  // opcode: 00EE
+                // return from chip8 sub
+    break;
+   }
+  break;
+  case 0x0F:
+   switch(n4) {
+    case 0x0B:  // opcode: 00FB
+                // scroll right: 4 pixels
+    break;
+    case 0x0C:  // opcode: 00FC
+                // scroll left:  4 pixels
+    break;
+    case 0x0D:  // opcode: 00FD
+                // quit the emulator
+     exit(EXIT_SUCCESS);
+    break;
+    case 0x0E:  // opcode: 00FE
+                // set chip8 graphics
+    break;
+    case 0x0F:  // opcode: 00FF
+                // set schip graphics
+    break;
+   }
+  break;
+  default:      // 0NNN
+                // call 1802 machine code program at NNN (n2n3n4)
+  break;
+ }
+}
+
+void opcode1(cpu_t cpu*) {
+ unsigned char n1, n2, n3, n4;
+ n1 = cpu->mem->rom[pos] >> 1;
+ n2 = cpu->mem->rom[pos] & 0x0F;
+ n3 = cpu->mem->rom[pos + 1] >> 1;
+ n4 = cpu->mem->rom[pos + 1] & 0x0F;
+
+ // 1NNN
+ // jump to NNN (n2n3n4)
+}
+
+void opcode2(cpu_t cpu*) {
+ unsigned char n1, n2, n3, n4;
+ n1 = cpu->mem->rom[pos] >> 1;
+ n2 = cpu->mem->rom[pos] & 0x0F;
+ n3 = cpu->mem->rom[pos + 1] >> 1;
+ n4 = cpu->mem->rom[pos + 1] & 0x0F;
+
+ // 2NNN
+ // call chip8 sub at NNN (n2n3n4); 16 successive calls max
+}
+
+void opcode3(cpu_t cpu*) {
+ unsigned char n1, n2, n3, n4;
+ n1 = cpu->mem->rom[pos] >> 1;
+ n2 = cpu->mem->rom[pos] & 0x0F;
+ n3 = cpu->mem->rom[pos + 1] >> 1;
+ n4 = cpu->mem->rom[pos + 1] & 0x0F;
+
+ // 3XKK
+ if(cpu->reg->v[n2] == cpu->mem->rom[pos + 1]) {
+  cpu->mem->rom += 2;
+ }
+}
+
+void opcode4(cpu_t cpu*) {
+ unsigned char n1, n2, n3, n4;
+ n1 = cpu->mem->rom[pos] >> 1;
+ n2 = cpu->mem->rom[pos] & 0x0F;
+ n3 = cpu->mem->rom[pos + 1] >> 1;
+ n4 = cpu->mem->rom[pos + 1] & 0x0F;
+
+ // 4XKK
+ if(cpu->reg->v[n2] != cpu->mem->rom[pos + 1]) {
+  cpu->mem->rom += 2;
+ }
+}
+
+void opcode5(cpu_t cpu*) {
+ unsigned char n1, n2, n3, n4;
+ n1 = cpu->mem->rom[pos] >> 1;
+ n2 = cpu->mem->rom[pos] & 0x0F;
+ n3 = cpu->mem->rom[pos + 1] >> 1;
+ n4 = cpu->mem->rom[pos + 1] & 0x0F;
+
+ // 5XY0
+ if(n4 == 0x00 && cpu->reg->v[n2] == cpu->reg->v[n3]) {
+  cpu->mem->rom += 2;
+ }
+}
+
+void opcode6(cpu_t cpu*) {
+ unsigned char n1, n2, n3, n4;
+ n1 = cpu->mem->rom[pos] >> 1;
+ n2 = cpu->mem->rom[pos] & 0x0F;
+ n3 = cpu->mem->rom[pos + 1] >> 1;
+ n4 = cpu->mem->rom[pos + 1] & 0x0F;
+
+ // 6XKK
+ cpu->reg->v[n2] = cpu->mem->rom[pos + 1];
+}
+
+void opcode7(cpu_t cpu*) {
+ unsigned char n1, n2, n3, n4;
+ n1 = cpu->mem->rom[pos] >> 1;
+ n2 = cpu->mem->rom[pos] & 0x0F;
+ n3 = cpu->mem->rom[pos + 1] >> 1;
+ n4 = cpu->mem->rom[pos + 1] & 0x0F;
+
+ // 6XKK
+ cpu->reg->v[n2] += cpu->mem->rom[pos + 1];
+}
+
 // instructions beginning with 8
 void opcode8(cpu_t * cpu) {
 
