@@ -65,17 +65,47 @@ void opcode1(cpu_t *cpu) {
 
  // 1NNN
  // jump to NNN (n2n3n4)
-}
 
+ cpu->mem->pos = (n2 << 8) | (n3 << 4) | n4;
+ cpu->advpc = 1;
+
+}
+ 
+// 2NNN
+// call chip8 sub at NNN (n2n3n4); 16 successive calls max (OR ARE THERE??????)
 void opcode2(cpu_t *cpu) {
+
  unsigned char n1, n2, n3, n4;
+ stack_t *crstk; 
+
  n1 = cpu->mem->rom[cpu->mem->pos] >> 4;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
- // 2NNN
- // call chip8 sub at NNN (n2n3n4); 16 successive calls max
+ 
+ if(cpu->stack == NULL) { // we are in top level
+    cpu->stack = malloc(sizeof(stack_t));
+    cpu->stack->next = NULL;
+
+    cpu->stack->adr = cpu->mem->pos;
+    cpu->mem->pos = (n2 << 8) | (n3 << 4) | n4;
+    printf("%x\n", cpu->mem->pos);
+ } else {
+    crstk = cpu->stack;
+    while(crstk->next)
+        crstk = crstk->next;
+
+    crstk->next = malloc(sizeof(stack_t));
+    crstk = crstk->next;
+    crstk->next = NULL;
+
+    crstk->adr = cpu->mem->pos;
+    cpu->mem->pos = (n2 << 8) | (n3 << 4) | n4;
+ }
+
+ cpu->advpc = 1;
+
 }
 
 void opcode3(cpu_t *cpu) {

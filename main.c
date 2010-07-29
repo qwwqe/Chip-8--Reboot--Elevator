@@ -23,9 +23,7 @@ int main(int argc, char **argv) {
    opcode8, opcode9, opcodea, opcodeb,
    opcodec, opcoded, opcodee, opcodef
   },
-  mem,
-  reg,
-  0    
+  mem, reg, NULL, 0    
  };
 
  printf("Initialized CPU: %p\n", &cpu);
