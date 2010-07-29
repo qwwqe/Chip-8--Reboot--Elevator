@@ -14,6 +14,8 @@ void opcode0(cpu_t *cpu) {
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
 
+    stack_t *crstk, *pvstk;
+
  switch(n3) {
   case 0x0C:    // opcode: 00CN
                 // scroll down: N (n2) lines
@@ -23,9 +25,21 @@ void opcode0(cpu_t *cpu) {
     case 0x00:  // opcode: 00E0
                 // erase screen
     break;
-    case 0x0E:  // opcode: 00EE
-                // return from chip8 sub
-    break;
+    case 0x0E:  // 00EE, return from chip8 sub
+
+        // if cpu->stack == NULL, then, i don't know....
+
+        crstk = pvstk = cpu->stack;
+        while(crstk->next) { // crstk will be the last node, pvstk will be the second last
+            crstk = crstk->next;
+            if(crstk->next)
+                pvstk = crstk;
+        }
+        
+        cpu->mem->pos = crstk->adr;
+        free(crstk);
+        pvstk->next = NULL;
+        break;
    }
   break;
   case 0x0F:
@@ -118,6 +132,7 @@ void opcode2(cpu_t *cpu) {
 
 }
 
+// 3XKK - skip next instruction if VX == KK
 void opcode3(cpu_t *cpu) {
 
  unsigned char n1, n2, n3, n4;	// nibbles
@@ -126,11 +141,9 @@ void opcode3(cpu_t *cpu) {
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
 
- // 3XKK
- if(cpu->reg->v[n2] == cpu->mem->mem[cpu->mem->pos + 1]) {
+ if(cpu->reg->v[n2] == cpu->mem->mem[cpu->mem->pos + 1])
   cpu->mem->pos += 2;
-  cpu->advpc = 1;
- }
+
 }
 
 void opcode4(cpu_t *cpu) {
@@ -292,6 +305,7 @@ void opcodeb(cpu_t *cpu) {
     n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
 
     cpu->mem->pos = ((n2 << 8) | (n3 << 4) | n4) + cpu->reg->v[0x00];
+    printf("jumping to... %x\n", cpu->mem->pos);
 
 }
 
