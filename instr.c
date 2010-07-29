@@ -7,8 +7,9 @@
 #include <time.h>
 
 void opcode0(cpu_t *cpu) {
- unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->mem[cpu->mem->pos] >> 4;
+
+ unsigned char n1, n2, n3, n4;	// nibbles
+ n1 = 0x00;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -57,8 +58,9 @@ void opcode0(cpu_t *cpu) {
 }
 
 void opcode1(cpu_t *cpu) {
- unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->mem[cpu->mem->pos] >> 4;
+
+ unsigned char n1, n2, n3, n4;	// nibbles
+ n1 = 0x01;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -75,16 +77,16 @@ void opcode1(cpu_t *cpu) {
 // call chip8 sub at NNN (n2n3n4); 16 successive calls max (OR ARE THERE??????)
 void opcode2(cpu_t *cpu) {
 
- unsigned char n1, n2, n3, n4;
- stack_t *crstk; 
+ unsigned char n1, n2, n3, n4;	// nibbles
+ stack_t *crstk;
 
- n1 = cpu->mem->mem[cpu->mem->pos] >> 4;
+ n1 = 0x02;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
 
  
- if(cpu->stack == NULL) { // we are in top level
+ if(cpu->stack == NULL) {	// we are in top level
     cpu->stack = malloc(sizeof(stack_t));
     cpu->stack->next = NULL;
 
@@ -109,8 +111,9 @@ void opcode2(cpu_t *cpu) {
 }
 
 void opcode3(cpu_t *cpu) {
- unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->mem[cpu->mem->pos] >> 4;
+
+ unsigned char n1, n2, n3, n4;	// nibbles
+ n1 = 0x03;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -123,8 +126,9 @@ void opcode3(cpu_t *cpu) {
 }
 
 void opcode4(cpu_t *cpu) {
- unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->mem[cpu->mem->pos] >> 4;
+
+ unsigned char n1, n2, n3, n4;	// nibbles
+ n1 = 0x04;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -137,8 +141,9 @@ void opcode4(cpu_t *cpu) {
 }
 
 void opcode5(cpu_t *cpu) {
- unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->mem[cpu->mem->pos] >> 4;
+
+ unsigned char n1, n2, n3, n4;	// nibbles
+ n1 = 0x05;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -151,8 +156,9 @@ void opcode5(cpu_t *cpu) {
 }
 
 void opcode6(cpu_t *cpu) {
- unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->mem[cpu->mem->pos] >> 4;
+
+ unsigned char n1, n2, n3, n4;	// nibbles
+ n1 = 0x06;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -162,8 +168,9 @@ void opcode6(cpu_t *cpu) {
 }
 
 void opcode7(cpu_t *cpu) {
- unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->mem[cpu->mem->pos] >> 4;
+
+ unsigned char n1, n2, n3, n4;	// nibbles
+ n1 = 0x07;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -240,7 +247,7 @@ void opcode8(cpu_t *cpu) {
 void opcode9(cpu_t *cpu) {
 
     unsigned char n1, n2, n3, n4; // nibbles
-    n1 = 0x08; // assumption..
+    n1 = 0x09; // assumption..
     n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
     n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
     n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
