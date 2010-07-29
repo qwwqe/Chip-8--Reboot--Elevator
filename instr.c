@@ -2,12 +2,14 @@
 #include "instr.h"
 #include "proc.h"
 
-void opcode0(cpu_t cpu*) {
+#include <stdlib.h>
+
+void opcode0(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[pos] >> 1;
- n2 = cpu->mem->rom[pos] & 0x0F;
- n3 = cpu->mem->rom[pos + 1] >> 1;
- n4 = cpu->mem->rom[pos + 1] & 0x0F;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  switch(n3) {
   case 0x0C:    // opcode: 00CN
@@ -47,62 +49,65 @@ void opcode0(cpu_t cpu*) {
                 // call 1802 machine code program at NNN (n2n3n4)
   break;
  }
+
+  cpu->mem->pos +=2;
+
 }
 
-void opcode1(cpu_t cpu*) {
+void opcode1(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[pos] >> 1;
- n2 = cpu->mem->rom[pos] & 0x0F;
- n3 = cpu->mem->rom[pos + 1] >> 1;
- n4 = cpu->mem->rom[pos + 1] & 0x0F;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  // 1NNN
  // jump to NNN (n2n3n4)
 }
 
-void opcode2(cpu_t cpu*) {
+void opcode2(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[pos] >> 1;
- n2 = cpu->mem->rom[pos] & 0x0F;
- n3 = cpu->mem->rom[pos + 1] >> 1;
- n4 = cpu->mem->rom[pos + 1] & 0x0F;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  // 2NNN
  // call chip8 sub at NNN (n2n3n4); 16 successive calls max
 }
 
-void opcode3(cpu_t cpu*) {
+void opcode3(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[pos] >> 1;
- n2 = cpu->mem->rom[pos] & 0x0F;
- n3 = cpu->mem->rom[pos + 1] >> 1;
- n4 = cpu->mem->rom[pos + 1] & 0x0F;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  // 3XKK
- if(cpu->reg->v[n2] == cpu->mem->rom[pos + 1]) {
+ if(cpu->reg->v[n2] == cpu->mem->rom[cpu->mem->pos + 1]) {
   cpu->mem->rom += 2;
  }
 }
 
-void opcode4(cpu_t cpu*) {
+void opcode4(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[pos] >> 1;
- n2 = cpu->mem->rom[pos] & 0x0F;
- n3 = cpu->mem->rom[pos + 1] >> 1;
- n4 = cpu->mem->rom[pos + 1] & 0x0F;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  // 4XKK
- if(cpu->reg->v[n2] != cpu->mem->rom[pos + 1]) {
+ if(cpu->reg->v[n2] != cpu->mem->rom[cpu->mem->pos + 1]) {
   cpu->mem->rom += 2;
  }
 }
 
-void opcode5(cpu_t cpu*) {
+void opcode5(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[pos] >> 1;
- n2 = cpu->mem->rom[pos] & 0x0F;
- n3 = cpu->mem->rom[pos + 1] >> 1;
- n4 = cpu->mem->rom[pos + 1] & 0x0F;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  // 5XY0
  if(n4 == 0x00 && cpu->reg->v[n2] == cpu->reg->v[n3]) {
@@ -110,30 +115,30 @@ void opcode5(cpu_t cpu*) {
  }
 }
 
-void opcode6(cpu_t cpu*) {
+void opcode6(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[pos] >> 1;
- n2 = cpu->mem->rom[pos] & 0x0F;
- n3 = cpu->mem->rom[pos + 1] >> 1;
- n4 = cpu->mem->rom[pos + 1] & 0x0F;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  // 6XKK
- cpu->reg->v[n2] = cpu->mem->rom[pos + 1];
+ cpu->reg->v[n2] = cpu->mem->rom[cpu->mem->pos + 1];
 }
 
-void opcode7(cpu_t cpu*) {
+void opcode7(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[pos] >> 1;
- n2 = cpu->mem->rom[pos] & 0x0F;
- n3 = cpu->mem->rom[pos + 1] >> 1;
- n4 = cpu->mem->rom[pos + 1] & 0x0F;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  // 6XKK
- cpu->reg->v[n2] += cpu->mem->rom[pos + 1];
+ cpu->reg->v[n2] += cpu->mem->rom[cpu->mem->pos + 1];
 }
 
 // instructions beginning with 8
-void opcode8(cpu_t * cpu) {
+void opcode8(cpu_t *cpu) {
 
     unsigned char n1, n2, n3, n4; // nibbles
     n1 = 0x08; // assumption..

@@ -5,13 +5,16 @@ CFLAGS	= -c -Wall -g
 
 all: clean chip8
 
-chip8: proc.o main.o
-	$(CC) proc.o main.o -o $@
+chip8: proc.o instr.o main.o
+	$(CC) proc.o main.o instr.o -o $@
 
 main.o: main.c
 	$(CC) $(CFLAGS) $<
 
 proc.o: proc.c
+	$(CC) $(CFLAGS) $<
+
+instr.o: instr.c
 	$(CC) $(CFLAGS) $<
 
 clean:

@@ -2,6 +2,8 @@
 #ifndef INSTR_H
 #define INSTR_H
 
+#include "proc.h"
+
 void opcode0(cpu_t *cpu); // instructions beginning with 0
 void opcode1(cpu_t *cpu); // instructions beginning with 1
 void opcode2(cpu_t *cpu); // instructions beginning with 2
