@@ -2,7 +2,9 @@
 #include "instr.h"
 #include "proc.h"
 
+#include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 void opcode0(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
@@ -141,6 +143,7 @@ void opcode7(cpu_t *cpu) {
 }
 
 // instructions beginning with 8
+// 8XY0; 8XY1; 8XY2; 8XY3; 8XY4; 8XY5; 8XY6; 8XY7; 8XYE
 void opcode8(cpu_t *cpu) {
 
     unsigned char n1, n2, n3, n4; // nibbles
@@ -203,6 +206,7 @@ void opcode8(cpu_t *cpu) {
 }
 
 // instructions beginning with 9
+// 9XY0, skip next intstruction if VX != VY
 void opcode9(cpu_t *cpu) {
 
     unsigned char n1, n2, n3, n4; // nibbles
@@ -211,7 +215,6 @@ void opcode9(cpu_t *cpu) {
     n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
     n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
-    // 9XY0 - skip next instruction if VX != VY
     if(cpu->mem->rom[n2] != cpu->mem->rom[n3]) {
         cpu->mem->pos += 2;
         cpu->advpc = 1;
@@ -219,25 +222,114 @@ void opcode9(cpu_t *cpu) {
 
 }
 
- // instructions beginning with a
+// instructions beginning with a
+// ANNN, i = NNN
 void opcodea(cpu_t *cpu) {
 
-    
+    unsigned char n1, n2, n3, n4; // nibbles
+    n1 = 0x0A; // assumption..
+    n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
+    n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
+    n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
+
+    cpu->reg->i = (n2 << 8) | (n3 << 4) | n4;
 
 }
 
 // instructions beginning with b
-void opcodeb(cpu_t *cpu) {}
+// BNNN, jump to NNN + V0
+void opcodeb(cpu_t *cpu) {
+
+    unsigned char n1, n2, n3, n4; // nibbles
+    n1 = 0x0B; // assumption..
+    n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
+    n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
+    n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
+
+    cpu->mem->pos = ((n2 << 8) | (n3 << 4) | n4) + cpu->reg->v[0x00];
+
+}
 
 // instructions beginning with c
-void opcodec(cpu_t *cpu) {}
+// CXKK, VX = random number & KK
+void opcodec(cpu_t *cpu) {
+
+    unsigned char n1, n2, n3, n4; // nibbles
+    n1 = 0x0C; // assumption..
+    n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
+    n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
+    n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
+
+    srand(time(NULL));
+    cpu->reg->v[n2] = rand() ^ ((n3 << 4) | n4);
+
+}
 
 // instructions beginning with d
-void opcoded(cpu_t *cpu) {} 
+// DXYN, draw sprite at (VX, VY) of width 8 and height N starting from address stored in i.
+//       If N is 0, height and width will both be 16
+//       VF is set to 1 if screen pixels are changed from set to unset, 0 if they aren't
+void opcoded(cpu_t *cpu) {
+
+} 
 
 // instructions beginning with e
-void opcodee(cpu_t *cpu) {} 
+// EX9E; EXA1
+void opcodee(cpu_t *cpu) {
+
+    unsigned char n1, n2, n3, n4; // nibbles
+    n1 = 0x0E; // assumption..
+    n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
+    n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
+    n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
+
+    // EX9E, skip next instruction if key stored in VX is pressed
+    
+    // EXA1, skip next instruction if key stored in VX isn't pressed
+
+} 
 
 // instructions beginning with f
-void opcodef(cpu_t *cpu) {} 
+// FX07; FX0A; FX15; FX18; FX1E; FX29; FX33; FX55; FX65
+void opcodef(cpu_t *cpu) {
+
+    int t;
+    unsigned char n1, n2, n3, n4; // nibbles
+    n1 = 0x0F; // assumption..
+    n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
+    n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
+    n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;    
+
+    switch((n3 << 4) | n4) {
+        case 0x07:    // FX07, VX = delay timer
+            break;
+        case 0x0A:    // FX0A, VX = awaited key press
+            break;
+        case 0x15:    // FX15, delay timer = VX
+            break;
+        case 0x18:    // FX18, sound timer = VX
+            break;
+        case 0x1E:    // FX1E, I = I + VX
+            cpu->reg->i = cpu->reg->i + cpu->reg->v[n2];
+            break;
+        case 0x29:    // FX29, I = location for sprite character or something (5 * VX.....)
+            cpu->reg->i = cpu->reg->v[n2] * 5;
+            break;
+        case 0x33:    // FX33, I, I + 1, and I + 2 = BCD representation of VX
+            printf("PONG BCD PONG BCD\n");
+            break;
+        case 0x55:    // FX55, store V0->VX in memory starting at address in I
+            for(t = 0; t <= n2; t++)
+                cpu->mem->rom[cpu->reg->i + t] = cpu->reg->v[t];
+            break;
+        case 0x65:    // FX65, store memory starting at address in I in V0->VX
+            for(t = 0; t <= n2; t++)
+                cpu->reg->v[t] = cpu->mem->rom[cpu->reg->i + t];
+            break;
+
+    }
+
+    
+
+} 
 

@@ -44,18 +44,8 @@ int main(int argc, char **argv) {
 
   if(!cpu.advpc)
    cpu.mem->pos += 2;
-  else
-    printf("HODAMN\n");
   cpu.advpc = 0;
  } 
- 
-/*
- * int x;
- * for(x = 0; x < cpu.mem->size; x += 2) {
- *  printf("byte #%03d: %02X%02X\n", x, cpu.mem->rom[x], cpu.mem->rom[x + 1]);
- * }
- *
- */
 
  exit(EXIT_SUCCESS);
 }
