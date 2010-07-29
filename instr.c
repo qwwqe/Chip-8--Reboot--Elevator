@@ -6,7 +6,7 @@
 
 void opcode0(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 4;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
@@ -56,7 +56,7 @@ void opcode0(cpu_t *cpu) {
 
 void opcode1(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 4;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
@@ -67,7 +67,7 @@ void opcode1(cpu_t *cpu) {
 
 void opcode2(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 4;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
@@ -78,7 +78,7 @@ void opcode2(cpu_t *cpu) {
 
 void opcode3(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 4;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
@@ -92,7 +92,7 @@ void opcode3(cpu_t *cpu) {
 
 void opcode4(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 4;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
@@ -106,7 +106,7 @@ void opcode4(cpu_t *cpu) {
 
 void opcode5(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 4;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
@@ -120,7 +120,7 @@ void opcode5(cpu_t *cpu) {
 
 void opcode6(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 4;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
@@ -131,7 +131,7 @@ void opcode6(cpu_t *cpu) {
 
 void opcode7(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
- n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
+ n1 = cpu->mem->rom[cpu->mem->pos] >> 4;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
@@ -220,7 +220,11 @@ void opcode9(cpu_t *cpu) {
 }
 
  // instructions beginning with a
-void opcodea(cpu_t *cpu) {}
+void opcodea(cpu_t *cpu) {
+
+    
+
+}
 
 // instructions beginning with b
 void opcodeb(cpu_t *cpu) {}
