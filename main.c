@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
 
  mem_t *mem = (mem_t *)malloc(sizeof(mem_t));
  reg_t *reg = (reg_t *)malloc(sizeof(reg_t));
- if(mem = NULL || reg = NULL) {
+ if(mem == NULL || reg == NULL) {
   fprintf(stderr, "error: Failed to allocate memory for MMU\n");
   exit(EXIT_FAILURE);
  }
@@ -39,10 +39,10 @@ int main(int argc, char **argv) {
 
  printf("Loaded rom:      %d bytes\n", cpu.mem->rom_size);
 
- cpu.mem->pos = 512;
+ cpu.mem->pos = 513;
 // while(cpu.mem->pos < (cpu.mem->rom_size - 2)) {
  while(cpu.mem->pos > 0x0200 && cpu.mem->pos < (cpu.mem->rom_size + 0x0200)) {
-  printf("OPCODE: %.2x%.2x\n", cpu.mem->mem[cpu.mem->pos], cpu.mem->mem[cpu.mem->pos + 1]);
+  printf("OPCODE: %02X%02X\n", cpu.mem->mem[cpu.mem->pos], cpu.mem->mem[cpu.mem->pos + 1]);
   cpu.fn[cpu.mem->mem[cpu.mem->pos] >> 4](&cpu);
 
   if(!cpu.advpc)
