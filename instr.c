@@ -8,7 +8,7 @@ void opcode0(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
  n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
- n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  switch(n3) {
@@ -58,7 +58,7 @@ void opcode1(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
  n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
- n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  // 1NNN
@@ -69,7 +69,7 @@ void opcode2(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
  n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
- n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  // 2NNN
@@ -80,7 +80,7 @@ void opcode3(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
  n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
- n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  // 3XKK
@@ -94,7 +94,7 @@ void opcode4(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
  n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
- n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  // 4XKK
@@ -108,7 +108,7 @@ void opcode5(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
  n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
- n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  // 5XY0
@@ -122,7 +122,7 @@ void opcode6(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
  n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
- n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  // 6XKK
@@ -133,7 +133,7 @@ void opcode7(cpu_t *cpu) {
  unsigned char n1, n2, n3, n4;
  n1 = cpu->mem->rom[cpu->mem->pos] >> 1;
  n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
- n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+ n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
  // 6XKK
@@ -146,7 +146,7 @@ void opcode8(cpu_t *cpu) {
     unsigned char n1, n2, n3, n4; // nibbles
     n1 = 0x08; // assumption..
     n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
-    n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+    n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
     n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
     switch(n4) { // with the 8xxx opcodes, the last four bits determine the behaviour
@@ -208,7 +208,7 @@ void opcode9(cpu_t *cpu) {
     unsigned char n1, n2, n3, n4; // nibbles
     n1 = 0x08; // assumption..
     n2 = cpu->mem->rom[cpu->mem->pos] & 0x0F;
-    n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 1;
+    n3 = cpu->mem->rom[cpu->mem->pos + 1] >> 4;
     n4 = cpu->mem->rom[cpu->mem->pos + 1] & 0x0F;
 
     // 9XY0 - skip next instruction if VX != VY

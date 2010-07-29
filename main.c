@@ -38,11 +38,14 @@ int main(int argc, char **argv) {
  printf("Loaded rom: %d bytes\n", cpu.mem->size);
 
  cpu.mem->pos = 0;
- while(1) {
-  //cpu.fn[cpu.mem->rom[cpu.mem->pos] >> 1](&cpu);
+ while(cpu.mem->pos < (cpu.mem->size - 2)) {
+  printf("OPCODE: %.2x%.2x\n", cpu.mem->rom[cpu.mem->pos], cpu.mem->rom[cpu.mem->pos + 1]);
+  cpu.fn[cpu.mem->rom[cpu.mem->pos] >> 4](&cpu);
 
   if(!cpu.advpc)
    cpu.mem->pos += 2;
+  else
+    printf("HODAMN\n");
   cpu.advpc = 0;
  } 
  
