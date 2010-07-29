@@ -21,9 +21,18 @@ int main(int argc, char **argv) {
 
  printf("Loaded rom: %d bytes\n", cpu.mem->size);
 
- int x;
+ cpu.mem->pos = 0;
+ while(1) {
+    //cpu.fn[cpu.mem->rom[cpu.mem->pos] >> 1](&cpu);
+
+    if(!cpu.advpc)
+        cpu.mem->pos += 2;
+    cpu.advpc = 0;
+  
+/* int x;
  for(x = 0; x < cpu.mem->size; x += 2) {
   printf("byte #%03d: %02X%02X\n", x, cpu.mem->rom[x], cpu.mem->rom[x + 1]);
+*/
  }
 
  exit(EXIT_SUCCESS);

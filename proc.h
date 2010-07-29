@@ -22,6 +22,7 @@ typedef struct {
 // instr	fn[0x0F];
  mem_t	*mem;
  reg_t	*reg;
+ int advpc; // advance program counter flag
 
 } cpu_t;
 
