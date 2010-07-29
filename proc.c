@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+reg_t reg = { };
+
 int read_rom(const char *filename, unsigned char **rom) {
 
  int rom_size;
