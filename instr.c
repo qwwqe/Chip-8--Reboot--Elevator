@@ -87,7 +87,11 @@ void opcode2(cpu_t *cpu) {
 
  
  if(cpu->stack == NULL) {	// we are in top level
-    cpu->stack = malloc(sizeof(stack_t));
+    cpu->stack = (stack_t *)malloc(sizeof(stack_t));
+    if(cpu->stack == NULL) {
+     fprintf(stderr, "Failed to memory for stack\n");
+     exit(EXIT_FAILURE);
+    }
     cpu->stack->next = NULL;
 
     cpu->stack->adr = cpu->mem->pos;
@@ -98,7 +102,11 @@ void opcode2(cpu_t *cpu) {
     while(crstk->next)
         crstk = crstk->next;
 
-    crstk->next = malloc(sizeof(stack_t));
+    crstk->next = (stack_t *)malloc(sizeof(stack_t));
+    if(crstk->next == NULL) {
+     fprintf(stderr, "Failed to memory for stack item\n");
+     exit(EXIT_FAILURE);
+    }
     crstk = crstk->next;
     crstk->next = NULL;
 
@@ -363,10 +371,7 @@ void opcodef(cpu_t *cpu) {
             for(t = 0; t <= n2; t++)
                 cpu->reg->v[t] = cpu->mem->mem[cpu->reg->i + t];
             break;
-
     }
-
-    
 
 } 
 
