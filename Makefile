@@ -1,5 +1,5 @@
 CC	= /usr/bin/gcc
-CFLAGS = -c -Wall -g
+CFLAGS	= -c -Wall -g
 
 .PHONY: clean all
 
