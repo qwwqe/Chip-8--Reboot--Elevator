@@ -10,13 +10,13 @@ chip8: proc.o instr.o main.o
 	$(CC) proc.o main.o instr.o -o $@
 
 main.o: main.c
-	$(CC) $(LIBS) $(CFLAGS) $<
+	$(CC) $(CFLAGS) $(LIBS) $<
 
 proc.o: proc.c
-	$(CC) $(LIBS) $(CFLAGS) $<
+	$(CC) $(CFLAGS) $(LIBS) $<
 
 instr.o: instr.c
-	$(CC) $(LIBS) $(CFLAGS) $<
+	$(CC) $(CFLAGS) $(LIBS) $<
 
 clean:
 	rm -f chip8 *.o
