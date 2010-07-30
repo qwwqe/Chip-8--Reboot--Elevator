@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "SDL.h"
 
@@ -19,14 +20,14 @@ int main(int argc, char **argv) {
  // Uint32		sticks, cticks;
 
  if(argc < 2) {
-  fprintf(stderr, "error: Missing arguments\n");
+  fprintf(stderr, "Error: Missing arguments\n");
   exit(EXIT_FAILURE);
  }
 
  mem = (mem_t *)malloc(sizeof(mem_t));
  reg = (reg_t *)malloc(sizeof(reg_t));
  if(mem == NULL || reg == NULL) {
-  fprintf(stderr, "error: Failed to allocate memory for MMU\n");
+  fprintf(stderr, "Error: Failed to allocate memory for MMU\n");
   exit(EXIT_FAILURE);
  }
 
@@ -65,7 +66,7 @@ int main(int argc, char **argv) {
  printf("Initialized SDL: %p\n", screen);
 
  cpu.mem->pos = ROM_LOC; // set memory pointer to rom location
- while(cpu.mem->pos >= 0x0200 && cpu.mem->pos < (cpu.mem->rom_size + 0x0200)) {
+ while(cpu.mem->pos >= ROM_LOC && cpu.mem->pos < (cpu.mem->rom_size + ROM_LOC)) {
   printf("OPCODE: %02X%02X\n", cpu.mem->mem[cpu.mem->pos], cpu.mem->mem[cpu.mem->pos + 1]);
   printf("\tPC: %x\n", cpu.mem->pos);
   cpu.fn[cpu.mem->mem[cpu.mem->pos] >> 4](&cpu);
@@ -73,6 +74,7 @@ int main(int argc, char **argv) {
   if(!cpu.advpc)
    cpu.mem->pos += 2;
   cpu.advpc = 0;
+  usleep((cpu.delay_timer * (1000 / 60)) * 1000); // obviously this isn't correct
  } 
 
  exit(EXIT_SUCCESS);

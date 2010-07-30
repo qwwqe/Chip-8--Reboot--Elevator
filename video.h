@@ -2,7 +2,7 @@
 #ifndef VIDEO_H
 #define VIDEO_H
 
-#define SWIDTH 32
-#define SHEIGHT 64
+#define SWIDTH 64
+#define SHEIGHT 32
 
 #endif

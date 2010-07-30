@@ -375,7 +375,7 @@ void opcodef(cpu_t *cpu) {	// opcodes starting with F: FX07, FX0A, FX15, FX18, F
     switch((n3 << 4) | n4) {
 
         case 0x07:    // opcode: FX07, VX = delay timer
-            // stub
+            cpu->reg->v[n2] = cpu->delay_timer;
             break;
 
         case 0x0A:    // opcode: FX0A, VX = awaited key press
@@ -383,7 +383,7 @@ void opcodef(cpu_t *cpu) {	// opcodes starting with F: FX07, FX0A, FX15, FX18, F
             break;
 
         case 0x15:    // opcode: FX15, delay timer = VX
-            // stub
+            cpu->delay_timer = cpu->reg->v[n2];
             break;
 
         case 0x18:    // opcode: FX18, sound timer = VX
