@@ -7,7 +7,7 @@ LIBS	= `sdl-config --libs`
 all: clean chip8
 
 chip8: proc.o instr.o main.o
-	$(CC) proc.o main.o instr.o -o $@
+	$(CC) $(LIBS) proc.o main.o instr.o -o $@
 
 main.o: main.c
 	$(CC) $(CFLAGS) $(LIBS) $<
