@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 #include "SDL.h"
 
@@ -74,8 +73,6 @@ int main(int argc, char **argv) {
   if(!cpu.advpc)
    cpu.mem->pos += 2;
   cpu.advpc = 0;
-
-  sleep(1);
  } 
 
  exit(EXIT_SUCCESS);
