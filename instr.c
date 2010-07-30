@@ -25,7 +25,7 @@ void opcode0(cpu_t *cpu) {		// opcodes starting with 0: 0NNN, 00CN, 00E0, 00EE, 
   case 0xEE:		// opcode: 00EE, return from chip8 sub
    if(cpu->stack == NULL) {
     fprintf(stderr, "error: Stack not found!\n");
-    exit(SUCCESS_FAILURE);
+    exit(EXIT_FAILURE);
    }
    crstk = pvstk = cpu->stack;
    
@@ -52,7 +52,7 @@ void opcode0(cpu_t *cpu) {		// opcodes starting with 0: 0NNN, 00CN, 00E0, 00EE, 
    exit(EXIT_SUCCESS);
    break;
 
-  case 0xEE:		// opcode: 00FE, set chip8 graphics
+  case 0xFE:		// opcode: 00FE, set chip8 graphics
    // stub
    break;
 
