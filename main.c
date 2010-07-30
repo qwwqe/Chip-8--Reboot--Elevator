@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "SDL.h"
 
@@ -14,6 +15,8 @@ int main(int argc, char **argv) {
  mem_t		*mem;
  reg_t		*reg;
  SDL_Surface	*screen;
+
+ // temporarily unused
  // Uint32		sticks, cticks;
 
  if(argc < 2) {
@@ -38,7 +41,7 @@ int main(int argc, char **argv) {
   mem, reg, NULL, 0
  };
 
- printf("Initialized CPU: %p\n", &cpu);
+ printf("Initialized CPU: %p\n", (void *)&cpu);
 
  if((cpu.mem->rom_size = read_rom(argv[1], &cpu.mem->mem)) == -1) {
   fprintf(stderr, "Failed to load rom: %s\n", argv[1]);
@@ -49,17 +52,20 @@ int main(int argc, char **argv) {
 
  // init SDL
  if(SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) < 0) {
-  fprintf(stderr, "Failed to init sdl crap.. %s\n", SDL_GetError());
+  fprintf(stderr, "Error: Failed to initialize SDL: %s\n", SDL_GetError());
   exit(EXIT_FAILURE);
  }
 
  screen = SDL_SetVideoMode(SWIDTH, SHEIGHT, 0, SDL_HWSURFACE | SDL_DOUBLEBUF);
+
  if(!screen) {
-  fprintf(stderr, "Failed to init sdl crap.. %s\n", SDL_GetError());
+  fprintf(stderr, "Error: Failed to initialize SDL screen surface: %s\n", SDL_GetError());
   exit(EXIT_FAILURE);
  }
 
- cpu.mem->pos = 0x0200;
+ printf("Initialized SDL: %p\n", screen);
+
+ cpu.mem->pos = ROM_LOC; // set memory pointer to rom location
  while(cpu.mem->pos >= 0x0200 && cpu.mem->pos < (cpu.mem->rom_size + 0x0200)) {
   printf("OPCODE: %02X%02X\n", cpu.mem->mem[cpu.mem->pos], cpu.mem->mem[cpu.mem->pos + 1]);
   printf("\tPC: %x\n", cpu.mem->pos);
@@ -68,6 +74,8 @@ int main(int argc, char **argv) {
   if(!cpu.advpc)
    cpu.mem->pos += 2;
   cpu.advpc = 0;
+
+  sleep(1);
  } 
 
  exit(EXIT_SUCCESS);

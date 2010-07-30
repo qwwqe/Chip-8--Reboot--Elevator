@@ -3,7 +3,7 @@
 #define PROC_H
 
 #define MEM_SIZE 4096
-#define ROM_LOC	 512
+#define ROM_LOC	 0x0200
 
 typedef struct _stack_t {
 

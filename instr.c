@@ -6,10 +6,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-void opcode0(cpu_t *cpu) {		// opcodes starting with 0: 0NNN, 00CN, 00E0, 00EE, 00FB, 00FC, 00FD, 00FF
+void opcode0(cpu_t *cpu) {	// opcodes starting with 0: 0NNN, 00CN, 00E0, 00EE, 00FB, 00FC, 00FD, 00FF
 
  unsigned char n1, n2, n3, n4;	// nibbles
- n1 = 0x00;						// assumption
+ n1 = 0x00;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -24,7 +24,7 @@ void opcode0(cpu_t *cpu) {		// opcodes starting with 0: 0NNN, 00CN, 00E0, 00EE, 
 
   case 0xEE:		// opcode: 00EE, return from chip8 sub
    if(cpu->stack == NULL) {
-    fprintf(stderr, "error: Stack not found!\n");
+    fprintf(stderr, "Error: Stack not found!\n");
     exit(EXIT_FAILURE);
    }
    crstk = pvstk = cpu->stack;
@@ -63,7 +63,7 @@ void opcode0(cpu_t *cpu) {		// opcodes starting with 0: 0NNN, 00CN, 00E0, 00EE, 
   default:
    if(n3 == 0x0C) {	// opcode: 00CN, scroll down N (n4) lines
    // stub
-   } else {			// opcode: 0NNN, call 1802 machine code program at NNN (n2n3n4)
+   } else {		// opcode: 0NNN, call 1802 machine code program at NNN (n2n3n4)
    // stub
    }
    break;
@@ -75,10 +75,10 @@ void opcode0(cpu_t *cpu) {		// opcodes starting with 0: 0NNN, 00CN, 00E0, 00EE, 
 
 }
 
-void opcode1(cpu_t *cpu) {		// opcode: 1NNN, jump to NNN (n2n3n4)
+void opcode1(cpu_t *cpu) {	// opcode: 1NNN, jump to NNN (n2n3n4)
 
  unsigned char n1, n2, n3, n4;	// nibbles
- n1 = 0x01;						// assumption
+ n1 = 0x01;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -89,22 +89,22 @@ void opcode1(cpu_t *cpu) {		// opcode: 1NNN, jump to NNN (n2n3n4)
 
 }
  
-void opcode2(cpu_t *cpu) {		// opcode: 2NNN, call chip8 at NNN (n2n3n4); maximum of 16 successive calls (OR ARE THERE????)
+void opcode2(cpu_t *cpu) {	// opcode: 2NNN, call chip8 at NNN (n2n3n4); maximum of 16 successive calls (OR ARE THERE????)
 
  unsigned char n1, n2, n3, n4;	// nibbles
- n1 = 0x02;						// assumption
+ n1 = 0x02;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
 
  stack_t *crstk;
  
- if(cpu->stack == NULL) {		// we are now in top level
+ if(cpu->stack == NULL) {	// we are now in top level
 
   cpu->stack = (stack_t *)malloc(sizeof(stack_t));
 
   if(cpu->stack == NULL) {
-   fprintf(stderr, "Failed to allocate memory for stack\n");
+   fprintf(stderr, "Error: Failed to allocate memory for stack\n");
    exit(EXIT_FAILURE);
   }
 
@@ -112,7 +112,7 @@ void opcode2(cpu_t *cpu) {		// opcode: 2NNN, call chip8 at NNN (n2n3n4); maximum
 
   cpu->stack->adr = cpu->mem->pos;
   cpu->mem->pos = (n2 << 8) | (n3 << 4) | n4;
-  printf("%x\n", cpu->mem->pos);
+  printf("Jumping to byte %d at memory address: %p \n", cpu->mem->pos, &cpu->mem->mem[cpu->mem->pos]);
 
  } else {
 
@@ -140,10 +140,10 @@ void opcode2(cpu_t *cpu) {		// opcode: 2NNN, call chip8 at NNN (n2n3n4); maximum
 
 }
 
-void opcode3(cpu_t *cpu) {		// opcode: 3XKK, skip next instruction if VX == KK
+void opcode3(cpu_t *cpu) {	// opcode: 3XKK, skip next instruction if VX == KK
 
  unsigned char n1, n2, n3, n4;	// nibbles
- n1 = 0x03;						// assumption
+ n1 = 0x03;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -154,10 +154,10 @@ void opcode3(cpu_t *cpu) {		// opcode: 3XKK, skip next instruction if VX == KK
  }
 }
 
-void opcode4(cpu_t *cpu) {		// opcode: 4XKK, skip next instruction if VX != KK
+void opcode4(cpu_t *cpu) {	// opcode: 4XKK, skip next instruction if VX != KK
 
  unsigned char n1, n2, n3, n4;	// nibbles
- n1 = 0x04;						// assumption
+ n1 = 0x04;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -168,10 +168,10 @@ void opcode4(cpu_t *cpu) {		// opcode: 4XKK, skip next instruction if VX != KK
  }
 }
 
-void opcode5(cpu_t *cpu) {		// opcode: 5XY0, skip next instruction if VX == VY
+void opcode5(cpu_t *cpu) {	// opcode: 5XY0, skip next instruction if VX == VY
 
  unsigned char n1, n2, n3, n4;	// nibbles
- n1 = 0x05;						// assumption
+ n1 = 0x05;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -182,10 +182,10 @@ void opcode5(cpu_t *cpu) {		// opcode: 5XY0, skip next instruction if VX == VY
  }
 }
 
-void opcode6(cpu_t *cpu) {		// opcode: 6XKK, VX = KK
+void opcode6(cpu_t *cpu) {	// opcode: 6XKK, VX = KK
 
  unsigned char n1, n2, n3, n4;	// nibbles
- n1 = 0x06;						// assumption
+ n1 = 0x06;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -193,10 +193,10 @@ void opcode6(cpu_t *cpu) {		// opcode: 6XKK, VX = KK
  cpu->reg->v[n2] = (n3 << 4) | n4;
 }
 
-void opcode7(cpu_t *cpu) {		// opcode: 7XKK, VX = VX + KK
+void opcode7(cpu_t *cpu) {	// opcode: 7XKK, VX = VX + KK
 
  unsigned char n1, n2, n3, n4;	// nibbles
- n1 = 0x07;						// assumption
+ n1 = 0x07;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -204,10 +204,10 @@ void opcode7(cpu_t *cpu) {		// opcode: 7XKK, VX = VX + KK
  cpu->reg->v[n2] += (n3 << 4) | n4;
 }
 
-void opcode8(cpu_t *cpu) {		// opcode starting with 8: 8XY0, 8XY1, 8XY2, 8XY3, 8XY4, 8XY5, 8XY6, 8XY7, 8XYE
+void opcode8(cpu_t *cpu) {	// opcode starting with 8: 8XY0, 8XY1, 8XY2, 8XY3, 8XY4, 8XY5, 8XY6, 8XY7, 8XYE
 
  unsigned char n1, n2, n3, n4;	// nibbles
- n1 = 0x08;						// assumption
+ n1 = 0x08;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -244,11 +244,11 @@ void opcode8(cpu_t *cpu) {		// opcode starting with 8: 8XY0, 8XY1, 8XY2, 8XY3, 8
 
         case 0x05:	// opcode: 8XY5, VX = VX - VY, VF = not borrow
             if(cpu->reg->v[n2] >= cpu->reg->v[n3]) {
-				// no borrow, set flag
+		// no borrow, set flag
                 cpu->reg->v[n2] = cpu->reg->v[n2] - cpu->reg->v[n3];
                 cpu->reg->v[0x0F] = 0x01;
             } else {
-				// borrow, don't set flag
+		// borrow, don't set flag
                 cpu->reg->v[n2] = cpu->reg->v[n3] - cpu->reg->v[n2];
                 cpu->reg->v[0x0F] = 0x00;
             }
@@ -260,11 +260,11 @@ void opcode8(cpu_t *cpu) {		// opcode starting with 8: 8XY0, 8XY1, 8XY2, 8XY3, 8
 
         case 0x07:	// opcode: 8XY7, VX = VY - VX, VF = not borrow
             if(cpu->reg->v[n3] >= cpu->reg->v[n2]) {
-				// no borrow, set flag
+		// no borrow, set flag
                 cpu->reg->v[n2] = cpu->reg->v[n3] - cpu->reg->v[n2];
                 cpu->reg->v[0x0F] = 0x01;
             } else {
-				// borrow, don't set flag
+		// borrow, don't set flag
                 cpu->reg->v[n2] = cpu->reg->v[n2] - cpu->reg->v[n3];
                 cpu->reg->v[0x0F] = 0x00;
             }
@@ -281,10 +281,10 @@ void opcode8(cpu_t *cpu) {		// opcode starting with 8: 8XY0, 8XY1, 8XY2, 8XY3, 8
 
 }
 
-void opcode9(cpu_t *cpu) {		// opcode: 9XY0, skip next instruction if VX != VY
+void opcode9(cpu_t *cpu) {	// opcode: 9XY0, skip next instruction if VX != VY
 
  unsigned char n1, n2, n3, n4;	// nibbles
- n1 = 0x09;						// assumption
+ n1 = 0x09;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -296,10 +296,10 @@ void opcode9(cpu_t *cpu) {		// opcode: 9XY0, skip next instruction if VX != VY
 
 }
 
-void opcodea(cpu_t *cpu) {		// opcode: ANNN, i = NNN (n2n3n4)
+void opcodea(cpu_t *cpu) {	// opcode: ANNN, i = NNN (n2n3n4)
 
  unsigned char n1, n2, n3, n4;	// nibbles
- n1 = 0x0A;						// assumption
+ n1 = 0x0A;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -308,23 +308,23 @@ void opcodea(cpu_t *cpu) {		// opcode: ANNN, i = NNN (n2n3n4)
 
 }
 
-void opcodeb(cpu_t *cpu) {		// opcode: BNNN, jump to NNN (n2n3n4) + V0
+void opcodeb(cpu_t *cpu) {	// opcode: BNNN, jump to NNN (n2n3n4) + V0
 
  unsigned char n1, n2, n3, n4;	// nibbles
- n1 = 0x0B;						// assumption
+ n1 = 0x0B;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
 
  cpu->mem->pos = ((n2 << 8) | (n3 << 4) | n4) + cpu->reg->v[0x00];
- printf("Jumping to byte %d in memory: %p \n", cpu->mem->pos, &cpu->mem->mem[cpu->mem->pos]);
+ printf("Jumping to byte %d at memory address: %p \n", cpu->mem->pos, &cpu->mem->mem[cpu->mem->pos]);
 
 }
 
-void opcodec(cpu_t *cpu) {		// opcode: CXKK, VX = random number & KK
+void opcodec(cpu_t *cpu) {	// opcode: CXKK, VX = random number & KK
 
  unsigned char n1, n2, n3, n4;	// nibbles
- n1 = 0x0C;						// assumption..
+ n1 = 0x0C;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -334,17 +334,17 @@ void opcodec(cpu_t *cpu) {		// opcode: CXKK, VX = random number & KK
 
 }
 
-void opcoded(cpu_t *cpu) {		// opcode: DXYN, draw sprite at (VX, VY) starting from address i in memory
-								// if N = 0: 16x16 sprite
-								// else: height = N, width = 8
-								// VF = 1 if screen pixels are changed from set to unset, 0 if they aren't
+void opcoded(cpu_t *cpu) {	// opcode: DXYN, draw sprite at (VX, VY) starting from address i in memory
+				// if N = 0: 16x16 sprite
+				// else: height = N, width = 8
+				// VF = 1 if screen pixels are changed from set to unset, 0 if they aren't
  // stub
 } 
 
-void opcodee(cpu_t *cpu) {		// opcodes starting with E: EX9E, EXA1
+void opcodee(cpu_t *cpu) {	// opcodes starting with E: EX9E, EXA1
 
  unsigned char n1, n2, n3, n4;	// nibbles
- n1 = 0x0E;						// assumption
+ n1 = 0x0E;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
@@ -363,11 +363,11 @@ void opcodee(cpu_t *cpu) {		// opcodes starting with E: EX9E, EXA1
 
 } 
 
-void opcodef(cpu_t *cpu) {		// opcodes starting with F: FX07, FX0A, FX15, FX18, FX1E, FX29, FX33, FX55, FX65
+void opcodef(cpu_t *cpu) {	// opcodes starting with F: FX07, FX0A, FX15, FX18, FX1E, FX29, FX33, FX55, FX65
 
  int t;
  unsigned char n1, n2, n3, n4;	// nibbles
- n1 = 0x0F;						// assumption
+ n1 = 0x0F;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;    
