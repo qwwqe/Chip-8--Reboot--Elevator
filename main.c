@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
  mem_t		*mem;
  reg_t		*reg;
  SDL_Surface	*screen;
- Uint32		sticks, cticks;
+ // Uint32		sticks, cticks;
 
  if(argc < 2) {
   fprintf(stderr, "error: Missing arguments\n");
