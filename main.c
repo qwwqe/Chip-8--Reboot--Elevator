@@ -16,9 +16,11 @@ int main(int argc, char **argv) {
  mem_t		*mem;
  reg_t		*reg;
  SDL_Surface	*screen;
+ SDL_Event      event;
 
  Uint32 ticks;
     int frames;
+    int running;
 
  // temporarily unused
  // Uint32		sticks, cticks;
@@ -76,20 +78,36 @@ int main(int argc, char **argv) {
 
     cpu.mem->pos = ROM_LOC; // set memory pointer to rom location
     ticks = SDL_GetTicks();
-    while(cpu.mem->pos >= ROM_LOC && cpu.mem->pos < (cpu.mem->rom_size + ROM_LOC)) {
+    running = 1;
+    while((cpu.mem->pos >= ROM_LOC && cpu.mem->pos < (cpu.mem->rom_size + ROM_LOC)) &&
+          running) {
         printf("OPCODE: %02X%02X\n", cpu.mem->mem[cpu.mem->pos], cpu.mem->mem[cpu.mem->pos + 1]);
         printf("\tPC: %x\n", cpu.mem->pos);
-        cpu.fn[cpu.mem->mem[cpu.mem->pos] >> 4](&cpu);
 
-        if(!cpu.advpc)
-           cpu.mem->pos += 2;
-          cpu.advpc = 0;
+        // event handling
+        while(SDL_PollEvent(&event)) {
+            switch(event.type) {
+                case SDL_QUIT:
+                    running = 0;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // cpu
+        cpu.fn[cpu.mem->mem[cpu.mem->pos] >> 4](&cpu);
 
         // one timer decrement per instruction, so cpu must run at 60hz  
         if(cpu.delay_timer > 0)
             --cpu.delay_timer;
         if(cpu.sound_timer > 0)
             --cpu.sound_timer;
+
+        // advance program counter
+        if(!cpu.advpc)
+           cpu.mem->pos += 2;
+          cpu.advpc = 0;
 
         // sleepy time
         SDL_Delay(1000 / CPU_SPEED);
@@ -101,6 +119,8 @@ int main(int argc, char **argv) {
         if(frames > 1000)
             break;*/
     } 
+
+    SDL_Quit();
 
     printf("average framerate over %f seconds: %f\n", (float)clock() / (float)CLOCKS_PER_SEC, (float)frames / ((float)clock() / (float)CLOCKS_PER_SEC));
     printf("clock: %ld, clocks per second: %ld\n", clock(), CLOCKS_PER_SEC); // !?LKAPDIOFJSIODUFJ
