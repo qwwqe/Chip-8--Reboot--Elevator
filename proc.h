@@ -6,6 +6,8 @@
 #define ROM_LOC	    0x0200
 #define TIMER_SPEED 60      // in hertz
 #define CPU_SPEED   TIMER_SPEED     // in hertz, or... "fps"
+#define SWIDTH 64
+#define SHEIGHT 32
 
 typedef struct _stack_t {
 
