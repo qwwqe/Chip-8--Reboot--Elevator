@@ -351,27 +351,21 @@ void opcoded(cpu_t *cpu) {
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
 
  unsigned int x, y, height, width, h, j;
- x = n2;
- y = n3;
-
- if(n4 == 0x00) {	// 16x16
-  height = 16;
-  width  = 16;
- } else {		// Nx8
-  height = n4;
-  width  = 8;
- }
+ x	= n2;
+ y	= n3;
+ height	= n4;
+ width	= 8;
 
  for(h = 0; h < height; h++) {
   for(j = 0; j < width; j++) {
    if(cpu->mem->mem[height * h + j] == 0x00) {
-    printf(" ");
-   } else {
     printf("*");
+   } else {
+    printf(" ");
    }
   }
+  printf("\n");
  }
- printf("\n");
 }
 
 void opcodee(cpu_t *cpu) {	// opcodes starting with E: EX9E, EXA1
