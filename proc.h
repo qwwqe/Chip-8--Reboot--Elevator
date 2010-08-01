@@ -2,8 +2,10 @@
 #ifndef PROC_H
 #define PROC_H
 
-#define MEM_SIZE 0x1000
-#define ROM_LOC	 0x0200
+#define MEM_SIZE    0x1000
+#define ROM_LOC	    0x0200
+#define TIMER_SPEED 60      // in hertz
+#define CPU_SPEED   500     // in hertz
 
 typedef struct _stack_t {
 

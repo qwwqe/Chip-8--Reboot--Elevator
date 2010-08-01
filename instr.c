@@ -149,7 +149,7 @@ void opcode3(cpu_t *cpu) {	// opcode: 3XKK, skip next instruction if VX == KK
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
 
  if(cpu->reg->v[n2] == ((n3 << 4) | n4)) {
-  cpu->mem->pos += 2;
+  cpu->mem->pos += 4;
   cpu->advpc = 1;
  }
 }
@@ -163,7 +163,7 @@ void opcode4(cpu_t *cpu) {	// opcode: 4XKK, skip next instruction if VX != KK
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
 
  if(cpu->reg->v[n2] != cpu->mem->mem[cpu->mem->pos + 1]) {
-  cpu->mem->pos += 2;
+  cpu->mem->pos += 4;
   cpu->advpc = 1;
  }
 }
@@ -177,7 +177,7 @@ void opcode5(cpu_t *cpu) {	// opcode: 5XY0, skip next instruction if VX == VY
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
 
  if(n4 == 0x00 && cpu->reg->v[n2] == cpu->reg->v[n3]) {
-  cpu->mem->pos += 2;
+  cpu->mem->pos += 4;
   cpu->advpc = 1;
  }
 }
@@ -290,7 +290,7 @@ void opcode9(cpu_t *cpu) {	// opcode: 9XY0, skip next instruction if VX != VY
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
 
  if(n4 == 0x00 && cpu->mem->mem[n2] != cpu->mem->mem[n3]) {
-  cpu->mem->pos += 2;
+  cpu->mem->pos += 4;
   cpu->advpc = 1;
  }
 
@@ -318,6 +318,8 @@ void opcodeb(cpu_t *cpu) {	// opcode: BNNN, jump to NNN (n2n3n4) + V0
 
  cpu->mem->pos = ((n2 << 8) | (n3 << 4) | n4) + cpu->reg->v[0x00];
  printf("Jumping to byte %d at memory address: %p \n", cpu->mem->pos, &cpu->mem->mem[cpu->mem->pos]);
+
+    cpu->advpc = 1;
 
 }
 

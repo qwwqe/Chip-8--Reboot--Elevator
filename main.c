@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "SDL.h"
 
@@ -15,6 +16,9 @@ int main(int argc, char **argv) {
  mem_t		*mem;
  reg_t		*reg;
  SDL_Surface	*screen;
+
+ clock_t ticks;
+    int frames;
 
  // temporarily unused
  // Uint32		sticks, cticks;
@@ -50,6 +54,7 @@ int main(int argc, char **argv) {
 
  printf("Loaded rom:      %d bytes\n", cpu.mem->rom_size);
 
+/*
  // init SDL
  if(SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) < 0) {
   fprintf(stderr, "Error: Failed to initialize SDL: %s\n", SDL_GetError());
@@ -64,18 +69,31 @@ int main(int argc, char **argv) {
  }
 
  printf("Initialized SDL: %p\n", screen);
+*/
+    printf("clocks per second: %ld\n", CLOCKS_PER_SEC);
+    ticks = clock();
+    frames = 0;
 
- cpu.mem->pos = ROM_LOC; // set memory pointer to rom location
- while(cpu.mem->pos >= ROM_LOC && cpu.mem->pos < (cpu.mem->rom_size + ROM_LOC)) {
-  printf("OPCODE: %02X%02X\n", cpu.mem->mem[cpu.mem->pos], cpu.mem->mem[cpu.mem->pos + 1]);
-  printf("\tPC: %x\n", cpu.mem->pos);
-  cpu.fn[cpu.mem->mem[cpu.mem->pos] >> 4](&cpu);
+    cpu.mem->pos = ROM_LOC; // set memory pointer to rom location
+    while(cpu.mem->pos >= ROM_LOC && cpu.mem->pos < (cpu.mem->rom_size + ROM_LOC)) {
+        printf("OPCODE: %02X%02X\n", cpu.mem->mem[cpu.mem->pos], cpu.mem->mem[cpu.mem->pos + 1]);
+        printf("\tPC: %x\n", cpu.mem->pos);
+        cpu.fn[cpu.mem->mem[cpu.mem->pos] >> 4](&cpu);
 
-  if(!cpu.advpc)
-   cpu.mem->pos += 2;
-  cpu.advpc = 0;
-  usleep((cpu.delay_timer * (1000 / 60)) * 1000); // obviously this isn't correct
- } 
+        if(!cpu.advpc)
+           cpu.mem->pos += 2;
+          cpu.advpc = 0;
+  
+        //if((clock() - ticks) / 
+        //usleep((cpu.delay_timer * (1000 / 60)) * 1000); // obviously this isn't correct
+        usleep(CPU_SPEED / 60);
+        frames++;
+        if(frames > 10000)
+            break;
+    } 
+
+//    printf("average framerate: %f\n", (float)frames / ((float)clock() / (float)CLOCKS_PER_SEC));
+    printf("%ld\n", clock()); // !?LKAPDIOFJSIODUFJ
 
  exit(EXIT_SUCCESS);
 }
