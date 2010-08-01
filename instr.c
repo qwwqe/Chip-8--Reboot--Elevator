@@ -336,12 +336,43 @@ void opcodec(cpu_t *cpu) {	// opcode: CXKK, VX = random number & KK
 
 }
 
-void opcoded(cpu_t *cpu) {	// opcode: DXYN, draw sprite at (VX, VY) starting from address i in memory
-				// if N = 0: 16x16 sprite
-				// else: height = N, width = 8
-				// VF = 1 if screen pixels are changed from set to unset, 0 if they aren't
- // stub
-} 
+// opcode: DXYN, draw sprite at (VX, VY) starting from address i in memory
+// if N = 0: 16x16 sprite
+// else: height = N, width = 8
+// VF = 1 if screen pixels are changed from set to unset, 0 if they aren't
+void opcoded(cpu_t *cpu) {
+
+ printf("DRAWING!!\n");
+ 
+ unsigned char n1, n2, n3, n4;	// nibbles
+ n1 = 0x0C;			// assumption
+ n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
+ n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
+ n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
+
+ unsigned int x, y, height, width, h, j;
+ x = n2;
+ y = n3;
+
+ if(n4 == 0x00) {	// 16x16
+  height = 16;
+  width  = 16;
+ } else {		// Nx8
+  height = n4;
+  width  = 8;
+ }
+
+ for(h = 0; h < height; h++) {
+  for(j = 0; j < width; j++) {
+   if(cpu->mem->mem[height * h + j] == 0x00) {
+    printf(" ");
+   } else {
+    printf("*");
+   }
+  }
+ }
+ printf("\n");
+}
 
 void opcodee(cpu_t *cpu) {	// opcodes starting with E: EX9E, EXA1
 
