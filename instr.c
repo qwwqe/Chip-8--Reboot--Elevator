@@ -389,7 +389,7 @@ void opcodef(cpu_t *cpu) {	// opcodes starting with F: FX07, FX0A, FX15, FX18, F
             break;
 
         case 0x18:    // opcode: FX18, sound timer = VX
-            // stub
+            cpu->sound_timer = cpu->reg->v[n2];
             break;
 
         case 0x1E:    // opcode: FX1E, I = I + VX

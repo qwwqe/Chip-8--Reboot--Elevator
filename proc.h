@@ -5,7 +5,7 @@
 #define MEM_SIZE    0x1000
 #define ROM_LOC	    0x0200
 #define TIMER_SPEED 60      // in hertz
-#define CPU_SPEED   500     // in hertz
+#define CPU_SPEED   TIMER_SPEED     // in hertz, or... "fps"
 
 typedef struct _stack_t {
 
@@ -37,7 +37,7 @@ typedef struct _cpu_t {
  stack_t *stack;	// root node
  int advpc;		// advance program counter flag
  int delay_timer;
- int snd_timer;
+ int sound_timer;
 } cpu_t;
 
 int read_rom(const char *filename, unsigned char **mem); // load rom file into memory

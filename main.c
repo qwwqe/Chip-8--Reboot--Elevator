@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
  reg_t		*reg;
  SDL_Surface	*screen;
 
- clock_t ticks;
+ Uint32 ticks;
     int frames;
 
  // temporarily unused
@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
    opcode8, opcode9, opcodea, opcodeb,
    opcodec, opcoded, opcodee, opcodef
   },
-  mem, reg, NULL, 0
+  mem, reg, NULL, 0, 0, 0               // memory, registers, stack, program counter flag, delay timer, sound timer
  };
 
  printf("Initialized CPU: %p\n", (void *)&cpu);
@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
 
  printf("Loaded rom:      %d bytes\n", cpu.mem->rom_size);
 
-/*
+
  // init SDL
  if(SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) < 0) {
   fprintf(stderr, "Error: Failed to initialize SDL: %s\n", SDL_GetError());
@@ -69,12 +69,13 @@ int main(int argc, char **argv) {
  }
 
  printf("Initialized SDL: %p\n", screen);
-*/
+
     printf("clocks per second: %ld\n", CLOCKS_PER_SEC);
     ticks = clock();
     frames = 0;
 
     cpu.mem->pos = ROM_LOC; // set memory pointer to rom location
+    ticks = SDL_GetTicks();
     while(cpu.mem->pos >= ROM_LOC && cpu.mem->pos < (cpu.mem->rom_size + ROM_LOC)) {
         printf("OPCODE: %02X%02X\n", cpu.mem->mem[cpu.mem->pos], cpu.mem->mem[cpu.mem->pos + 1]);
         printf("\tPC: %x\n", cpu.mem->pos);
@@ -83,17 +84,26 @@ int main(int argc, char **argv) {
         if(!cpu.advpc)
            cpu.mem->pos += 2;
           cpu.advpc = 0;
-  
+
+        // one timer decrement per instruction, so cpu must run at 60hz  
+        if(cpu.delay_timer > 0)
+            --cpu.delay_timer;
+        if(cpu.sound_timer > 0)
+            --cpu.sound_timer;
+
+        // sleepy time
+        SDL_Delay(1000 / CPU_SPEED);
+
         //if((clock() - ticks) / 
         //usleep((cpu.delay_timer * (1000 / 60)) * 1000); // obviously this isn't correct
-        usleep(CPU_SPEED / 60);
+        /*usleep(CPU_SPEED / 60);
         frames++;
-        if(frames > 10000)
-            break;
+        if(frames > 1000)
+            break;*/
     } 
 
-//    printf("average framerate: %f\n", (float)frames / ((float)clock() / (float)CLOCKS_PER_SEC));
-    printf("%ld\n", clock()); // !?LKAPDIOFJSIODUFJ
+    printf("average framerate over %f seconds: %f\n", (float)clock() / (float)CLOCKS_PER_SEC, (float)frames / ((float)clock() / (float)CLOCKS_PER_SEC));
+    printf("clock: %ld, clocks per second: %ld\n", clock(), CLOCKS_PER_SEC); // !?LKAPDIOFJSIODUFJ
 
  exit(EXIT_SUCCESS);
 }
