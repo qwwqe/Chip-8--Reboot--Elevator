@@ -361,9 +361,9 @@ void opcoded(cpu_t *cpu) {
  for(i = 0; i < height; i++) {
   for(j = 0; j < width; j++) {
         if(cpu->mem->mem[cpu->reg->i + i] & (0x80 >> j)) { // pixel at (i, j) is to be set
-            cpu->mem->vmem[i][j] ^= 1;
+            cpu->mem->vmem[i + n3][j + n2] ^= 1;
             
-            if(!cpu->mem->vmem[i][j])
+            if(!cpu->mem->vmem[i + n3][j + n2])
                 cpu->reg->v[0x0F] = 1;
         }
 
