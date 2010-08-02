@@ -360,11 +360,14 @@ void opcoded(cpu_t *cpu) {
  cpu->reg->v[0x0F] = 0;
  for(i = 0; i < height; i++) {
   for(j = 0; j < width; j++) {
-        cpu->mem->vmem[i][j] = !cpu->mem->vmem[i][j];
-        //cpu->mem->vmem[i][j] ^= cpu->mem->mem[cpu->reg->i + i];
+        if(cpu->mem->mem[cpu->reg->i + i] & (0x80 >> j)) { // pixel at (i, j) is to be set
+            cpu->mem->vmem[i][j] ^= 1;
+            
+            if(!cpu->mem->vmem[i][j])
+                cpu->reg->v[0x0F] = 1;
+        }
+
         printf("%d", cpu->mem->vmem[i][j]);
-        if(!cpu->mem->vmem[i][j])
-            cpu->reg->v[0x0F] = 1;
 
 /*   if(cpu->mem->mem[height * h + j] == 0x00) {
     printf("*");
