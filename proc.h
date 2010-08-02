@@ -19,6 +19,7 @@ typedef struct _stack_t {
 typedef struct {
 
  unsigned char *mem;
+ unsigned int vmem[SHEIGHT][SWIDTH]; // just ones and zeros
  unsigned int pos;
  unsigned int rom_size;
 
@@ -26,7 +27,7 @@ typedef struct {
 
 typedef struct {
 
- unsigned char v[0x0F];
+ unsigned char v[0x10];
  unsigned short int i;
 
 } reg_t;
@@ -37,6 +38,7 @@ typedef struct _cpu_t {
  mem_t	*mem;
  reg_t	*reg;
  stack_t *stack;	// root node
+ int keys[0x10];    // key states
  int advpc;		// advance program counter flag
  int delay_timer;
  int sound_timer;

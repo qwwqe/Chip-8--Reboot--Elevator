@@ -337,7 +337,7 @@ void opcodec(cpu_t *cpu) {	// opcode: CXKK, VX = random number & KK
 }
 
 // opcode: DXYN, draw sprite at (VX, VY) starting from address i in memory
-// if N = 0: 16x16 sprite
+// if N = 0: 16x16 sprite um oops that's supposed to be schip8 ("s-chip 8")
 // else: height = N, width = 8
 // VF = 1 if screen pixels are changed from set to unset, 0 if they aren't
 void opcoded(cpu_t *cpu) {
@@ -345,26 +345,35 @@ void opcoded(cpu_t *cpu) {
  printf("DRAWING!!\n");
  
  unsigned char n1, n2, n3, n4;	// nibbles
+ unsigned int x, y, height, width, i, j;
+
  n1 = 0x0C;			// assumption
  n2 = cpu->mem->mem[cpu->mem->pos] & 0x0F;
  n3 = cpu->mem->mem[cpu->mem->pos + 1] >> 4;
  n4 = cpu->mem->mem[cpu->mem->pos + 1] & 0x0F;
 
- unsigned int x, y, height, width, h, j;
  x	= n2;
  y	= n3;
  height	= n4;
  width	= 8;
 
- for(h = 0; h < height; h++) {
+ cpu->reg->v[0x0F] = 0;
+ for(i = 0; i < height; i++) {
   for(j = 0; j < width; j++) {
-   if(cpu->mem->mem[height * h + j] == 0x00) {
+        cpu->mem->vmem[i][j] = !cpu->mem->vmem[i][j];
+        //cpu->mem->vmem[i][j] ^= cpu->mem->mem[cpu->reg->i + i];
+        printf("%d", cpu->mem->vmem[i][j]);
+        if(!cpu->mem->vmem[i][j])
+            cpu->reg->v[0x0F] = 1;
+
+/*   if(cpu->mem->mem[height * h + j] == 0x00) {
     printf("*");
    } else {
     printf(" ");
    }
+*/
   }
-  printf("\n");
+    printf("\n");
  }
 }
 
@@ -379,11 +388,17 @@ void opcodee(cpu_t *cpu) {	// opcodes starting with E: EX9E, EXA1
  switch((n3 << 4) | n4) {
 
   case 0x9E:	// opcode: EX9E, skip next instruction if key stored in VX is pressed
-   // stub
-   break;
+    if(cpu->keys[cpu->reg->v[n2]]) {
+        cpu->mem->pos += 4;
+        cpu->advpc = 1;
+    }
+    break;
 
   case 0xA1:	// opcode: EXA1, skip next instruction if key stored in VX isn't pressed
-   // stub
+    if(!cpu->keys[cpu->reg->v[n2]]) {
+        cpu->mem->pos += 4;
+        cpu->advpc = 1;
+    }
    break;
 
  }
