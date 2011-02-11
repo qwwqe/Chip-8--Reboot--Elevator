@@ -1,1 +1,3 @@
-asdasdasdDONGS
+Chip 8 emulator written in C for the linux platform (only?). unsure if it's cross compilable.
+
+missing audio, video, and input support. processor only .. ?
